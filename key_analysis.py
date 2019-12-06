@@ -12,11 +12,11 @@ parser.add_argument('--mode', required=True,
         choices=['before', 'after', 'plot'],
         help="Use 'before 'to analyze keys the first time, use 'after' to " \
         "analyze the keys again after using Mixed in Key and compare the " \
-        "results to the 'before' run, use 'plot' to ")
+        "results to the 'before' run, use 'plot' to visualize results")
 parser.add_argument('--path',
         help='base path to directory for song key analysis')
 parser.add_argument('--exclude', default=[], nargs='+',
-        help='list of geners to exclude from plot')
+        help='list of genres to exclude from plot')
 args = parser.parse_args()
 
 
@@ -239,7 +239,7 @@ else:
     try:
         diff_keys = pickle.load(open('diff_keys.pkl', 'rb'))
     except FileNotFoundError:
-        sys.exit("No existing diff_keys.pkl file -- run in 'after' mode first to get initial song keys")
+        sys.exit("No existing diff_keys.pkl file -- run in 'after' mode first to get adjustedsong keys")
 
     plot(old_keys, diff_keys)
 
