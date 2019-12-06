@@ -23,6 +23,7 @@ args = parser.parse_args()
 def plot(old_keys, diff_keys):
 
     def bar_text(bars, values):
+        print(len(bars), len(values))
         for b, bar_type in enumerate(bars):
             print(f"bar type {b} is {bar_type}")
             for idx,rect in enumerate(bar_type):
@@ -82,7 +83,7 @@ def plot(old_keys, diff_keys):
     plt.legend(loc='upper right', bbox_to_anchor=(1.1,1.1), ncol=1)
     #plt.tight_layout(pad=2)
     plt.yticks([])
-    plt.title('Ratio of changed keys to same keys by genre')
+    plt.title('Changed/same keys')
     plt.show()
 
     ############################################################################
@@ -90,6 +91,7 @@ def plot(old_keys, diff_keys):
     ############################################################################
 
     fig, ax = plt.subplots()
+
     # get numbers for per genre key analysis
     data = {}
     key_change_types = {
@@ -121,15 +123,22 @@ def plot(old_keys, diff_keys):
 
     # from count values to percentages
     totals = [sum(v.values()) for v in data.values()]
+    all_totals = sum(totals)
     counts = [[data[k][k_type] for k,total in zip(data.keys(), totals)]
             for k_type in key_change_types.keys()]
+    counts_all = [sum(x) for x in counts]
     bars = [[data[k][k_type] / total * 100 for k,total in zip(data.keys(), totals)]
             for k_type in key_change_types.keys()]
+    bars_all = [sum([data[k][k_type] for k in data.keys()]) / all_totals * 100
+            for k_type in key_change_types.keys()]
+    for i,each in enumerate(bars):
+        each.insert(0, bars_all[i])
+    for i,each in enumerate(counts):
+        each.insert(0, counts_all[i])
 
     # plot
     barWidth = 0.85
-    # names = ['Overall'] + list(data.keys())
-    names = list(data.keys())
+    names = ['Overall'] + list(data.keys())
     r = list(range(len(names)))
 
     colors = ['#e7fb78',
@@ -156,9 +165,8 @@ def plot(old_keys, diff_keys):
     plt.xlabel("Genre")
     plt.ylabel("Number of songs")
     plt.legend(loc='upper right', bbox_to_anchor=(1.1,1.2), ncol=1)
-    #plt.tight_layout(pad=2)
     plt.yticks([])
-    plt.title('Ratio of changed keys to same keys by genre')
+    plt.title('Type of key change')
     plt.show()
 
 
